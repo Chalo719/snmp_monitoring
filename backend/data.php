@@ -70,14 +70,19 @@ foreach ($ip_addresses as $ip) {
 
     $resources_stat = [
       'device_id' => $device_data['id'],
-      'cpu' => $resources_data['data']['cpu_load']['result'] . ' %',
+      'cpu' => $resources_data['data']['cpu_load']['result'],
       'disks' => [],
-      'memory' => $resources_data['data']['memory_usage'] . ' ГБ / ' . $resources_data['data']['memory_total'] . ' ГБ'
+      'memory_usage' => $resources_data['data']['memory_usage'],
+      'memory_total' => $resources_data['data']['memory_total']
     ];
 
     foreach ($resources_data['data']['disks'] as $disk) {
       if ($disk['disk_name'] != '<Неизвестно>') {
-        $resources_stat['disks'][] = $disk['disk_name'] . ': ' . $disk['disk_usage'] . ' ГБ / ' . $disk['disk_total'] . ' ГБ';
+        $resources_stat['disks'][] = [
+          'disk_name' => $disk['disk_name'],
+          'disk_usage' => $disk['disk_usage'],
+          'disk_total' => $disk['disk_total']
+        ];
       } else {
         $resources_stat['disks'][] = '<Неизвестно>';
       }

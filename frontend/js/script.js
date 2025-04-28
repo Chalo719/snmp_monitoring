@@ -75,9 +75,17 @@ function renderTable(devices, trafficStats, resourcesStats) {
         const r = resourcesStats.find(res => res.device_id === device.id);
         return `
                     <tr>
-                      <td>${r.cpu}</td>
-                      <td>${r.disks.join('<br>')}</td>
-                      <td>${r.memory}</td>
+                      <td>${r.cpu} %</td>
+                      <td>
+                      ${(() => {
+            let d = '';
+            r.disks.forEach(disk => {
+              d += `${disk.disk_name}: ${disk.disk_usage} ГБ / ${disk.disk_total} ГБ <br> `;
+            });
+            return d;
+          })()}
+                      </td>
+                      <td>${r.memory_usage} ГБ / ${r.memory_total} ГБ</td>
                     </tr>
                   `;
       })()}
