@@ -26,7 +26,7 @@ function renderTable(devices, trafficStats, resourcesStats) {
           <td>${device.netmask}</td>
           <td>${device.login}</td>
           <td>${device.passwd}</td>
-          <td>${device.passwd_enabled}</td>
+          <td>${device.passwd_enabled == 0 ? 'false' : 'true'}</td>
           <td>
             <button onclick="toggleVisibility('traffic-${device.id}')">Интерфейсы</button>
             <button onclick="toggleVisibility('resources-${device.id}')">Ресурсы</button>
@@ -39,10 +39,10 @@ function renderTable(devices, trafficStats, resourcesStats) {
               <thead>
                 <tr>
                   <th>Интерфейс</th>
-                  <th>In Unicast</th>
-                  <th>Out Unicast</th>
-                  <th>In Multicast</th>
-                  <th>Out Multicast</th>
+                  <th>In Unicast (пакеты)</th>
+                  <th>Out Unicast (пакеты)</th>
+                  <th>In Multicast (пакеты)</th>
+                  <th>Out Multicast (пакеты)</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,17 +75,17 @@ function renderTable(devices, trafficStats, resourcesStats) {
         const r = resourcesStats.find(res => res.device_id === device.id);
         return `
                     <tr>
-                      <td>${r.cpu} %</td>
+                      <td>${r.cpu_load == 0 ? '<Неизвестно>' : r.cpu_load} %</td>
                       <td>
                       ${(() => {
             let d = '';
             r.disks.forEach(disk => {
-              d += `${disk.disk_name}: ${disk.disk_usage} ГБ / ${disk.disk_total} ГБ <br> `;
+              d += `${disk.disk_name}: ${disk.disk_usage == 0 ? '<Неизвестно>' : disk.disk_usage} ГБ / ${disk.disk_total == 0 ? '<Неизвестно>' : disk.disk_total} ГБ <br> `;
             });
             return d;
           })()}
                       </td>
-                      <td>${r.memory_usage} ГБ / ${r.memory_total} ГБ</td>
+                      <td>${r.memory_usage == 0 ? '<Неизвестно>' : r.memory_usage} ГБ / ${r.memory_total == 0 ? '<Неизвестно>' : r.memory_total} ГБ</td>
                     </tr>
                   `;
       })()}
@@ -127,11 +127,17 @@ function showNotifications(logMessages) {
   button.textContent = `⚠️ (${errorCount})`;
 }
 
-fetch('../backend/data.php')
-  .then(response => response.json())
-  .then(data => {
-    renderTable(data.devices, data.trafficStats, data.resourcesStats);
-    showNotifications(data.logMessages);
+fetch('../backend/get_data.php')
+  .then(response => response.text())
+  .then(text => {
+    try {
+      const data = JSON.parse(text);
+      renderTable(data.devices, data.trafficStats, data.resourcesStats);
+      showNotifications(data.logMessages);
+    } catch (error) {
+      console.error('Ошибка разбора JSON:', error);
+      showNotifications([{ status: 'failure', message: `Ошибка обработки данных с сервера: ${error.message}` }]);
+    }
   })
   .catch(error => {
     showNotifications([{ status: 'failure', message: `Ошибка загрузки данных: ${error.message}` }]);

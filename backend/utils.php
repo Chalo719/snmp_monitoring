@@ -232,7 +232,7 @@ function get_device_resources($device_ip)
             break;
 
           case 'HOST-RESOURCES-MIB::hrMemoryUsed':
-            $resources_data['memory_usage'] = bytes_to_gb(parse_usage_data($data));
+            $resources_data['memory_usage'] = kb_to_gb(parse_usage_data($data));
             break;
 
           case 'HOST-RESOURCES-MIB::hrMemorySize':
@@ -310,4 +310,19 @@ function bytes_to_gb($bytes)
 function kb_to_gb($kb)
 {
   return round($kb / (1024 ** 2), 4);
+}
+
+// Функция для отправки ошибки в поддерживаемом клиентом формате
+function send_error($message)
+{
+  header('Content-Type: application/json; charset=utf-8');
+  echo json_encode([
+    'devices' => [],
+    'trafficStats' => [],
+    'resourcesStats' => [],
+    'logMessages' => [
+      ['status' => 'failure', 'message' => $message]
+    ]
+  ]);
+  exit;
 }
