@@ -132,7 +132,7 @@ input[type="number"] {
 }
 
 .secondary-button:not(:disabled):hover {
-  background-color: #ffa726;
+  background-color: #cc8822;
 }
 
 :disabled {

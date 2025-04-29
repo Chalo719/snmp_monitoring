@@ -156,7 +156,6 @@ function generate_data() {
 
   loader.classList.remove('hidden');
   refreshButton.disabled = true;
-  refreshIntervalInput.disabled = true;
   refreshSubmitButton.disabled = true;
 
   fetch('../backend/generate_data.php')
@@ -169,7 +168,6 @@ function generate_data() {
     .finally(() => {
       loader.classList.add('hidden');
       refreshButton.disabled = false;
-      refreshIntervalInput.disabled = false;
       refreshSubmitButton.disabled = false;
     });
 }
@@ -181,7 +179,7 @@ function startAutoRefresh() {
   }, refreshIntervalSec * 1000);
 }
 
-let refreshIntervalSec = 10;
+let refreshIntervalSec = 30;
 let generateDataInterval;
 
 const refreshForm = document.forms['refresh-form'];
@@ -211,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isNaN(newInterval) && newInterval > 0) {
       refreshIntervalSec = newInterval;
       startAutoRefresh();
+      alert(`Установлен интервал обновления: ${refreshIntervalSec} сек.`);
     } else {
       alert('Введите корректное число секунд (> 0)');
     }
