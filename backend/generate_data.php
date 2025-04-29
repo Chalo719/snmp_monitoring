@@ -9,6 +9,7 @@ function generateData($conn)
   $conn->query("TRUNCATE TABLE disks");
   $conn->query("DELETE FROM devices");
   $conn->query("ALTER TABLE devices AUTO_INCREMENT = 1");
+  $conn->query("TRUNCATE TABLE log_messages");
 
   $local_network = get_local_network();
   if (!$local_network) {
@@ -131,5 +132,24 @@ function generateData($conn)
     }
   }
 
+  $stmt5 = $conn->prepare("INSERT INTO log_messages (status, message) VALUES (?, ?)");
+  foreach ($logMessages as $log) {
+    $stmt5->bind_param("ss", $log['status'], $log['message']);
+    $stmt5->execute();
+  }
+
   return "ok";
+}
+
+if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
+  require_once '../db/db_connect.php';
+
+  $result = generateData($conn);
+
+  if ($result !== "ok") {
+    echo "Ошибка генерации данных: " . htmlspecialchars($result);
+    exit;
+  }
+
+  $conn->close();
 }

@@ -35,8 +35,10 @@ foreach ($resourcesStats as &$resources) {
   $resources['disks'] = array_values($device_disks);
 }
 
-// Получаем логи
-// $logMessages = get_log_messages(); // Предполагается, что у вас есть функция для получения логов
+$log_query = $conn->query("SELECT status, message FROM log_messages ORDER BY id");
+while ($log = $log_query->fetch_assoc()) {
+  $logMessages[] = $log;
+}
 
 echo json_encode([
   'devices' => $devices,

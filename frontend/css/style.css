@@ -63,3 +63,29 @@ th {
 .notification-error {
   color: red;
 }
+
+#loader {
+  text-align: center;
+  margin: 20px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+#loader::after {
+  content: ' ⏳';
+  animation: dots 1s steps(1) infinite;
+}
+
+@keyframes dots {
+  0% {
+    content: ' ⏳';
+  }
+
+  50% {
+    content: ' ⏳⏳';
+  }
+
+  100% {
+    content: ' ⏳⏳⏳';
+  }
+}

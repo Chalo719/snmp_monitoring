@@ -16,6 +16,17 @@
     </header>
 
     <main>
+      <div class="controls">
+        <button id="refresh-button">🔄 Перезапустить SNMP-опрос</button>
+        <form action="" name="refresh-form">
+          <label for="refresh-interval">Интервал обновления (сек):</label>
+          <input type="number" id="refresh-interval" min="10" value="10" />
+
+          <button type="submit">Сохранить интервал</button>
+        </form>
+      </div>
+
+      <div id="loader" class="hidden">Загрузка...</div>
       <div id="device-table"></div>
     </main>
 
