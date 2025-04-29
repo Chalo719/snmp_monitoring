@@ -37,8 +37,8 @@ function renderTable(devices, trafficStats, resourcesStats) {
         <td>${device.passwd}</td>
         <td>${device.passwd_enabled == 0 ? 'false' : 'true'}</td>
         <td>
-          <button onclick="toggleVisibility('traffic-${device.id}')">Интерфейсы</button>
-          <button onclick="toggleVisibility('resources-${device.id}')">Ресурсы</button>
+          <button class="primary-button" onclick="toggleVisibility('traffic-${device.id}')">Интерфейсы</button>
+          <button class="primary-button" onclick="toggleVisibility('resources-${device.id}')">Ресурсы</button>
         </td>
       </tr>
 
@@ -115,25 +115,22 @@ function toggleVisibility(id) {
 }
 
 function showNotifications(logMessages) {
-  const dropdown = document.getElementById('notification-dropdown');
-  const button = document.getElementById('notification-button');
-
-  dropdown.innerHTML = '';
+  notificationDropdown.innerHTML = '';
 
   if (logMessages.length === 0) {
-    dropdown.innerHTML = '<div class="notification-item">Нет ошибок.</div>';
+    notificationDropdown.innerHTML = '<div class="notification-item">Нет ошибок.</div>';
   } else {
     logMessages.forEach(log => {
       const item = document.createElement('div');
       item.classList.add('notification-item');
       item.classList.add(log.status === 'success' ? 'notification-success' : 'notification-error');
       item.textContent = `${log.status === 'success' ? '✅' : '❌'} ${log.message}`;
-      dropdown.appendChild(item);
+      notificationDropdown.appendChild(item);
     });
   }
 
   const errorCount = logMessages.filter(log => log.status !== 'success').length;
-  button.textContent = `⚠️ (${errorCount})`;
+  notificationButton.textContent = `⚠️ (${errorCount})`;
 }
 
 function get_data() {

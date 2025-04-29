@@ -10,25 +10,41 @@
     <header>
       <h1>Мониторинг сетевых устройств</h1>
       <div class="notifications-container">
-        <button id="notification-button">⚠️ (0)</button>
+        <button id="notification-button" class="icon-button">
+          ⚠️ <span>(0)</span>
+        </button>
         <div id="notification-dropdown" class="hidden"></div>
       </div>
     </header>
 
     <main>
-      <div class="controls">
-        <button id="refresh-button">🔄 Перезапустить SNMP-опрос</button>
-        <form action="" name="refresh-form">
+      <section class="controls">
+        <button id="refresh-button" class="primary-button">
+          🔄 Перезапустить SNMP-опрос
+        </button>
+        <form name="refresh-form" class="refresh-form">
           <label for="refresh-interval">Интервал обновления (сек):</label>
           <input type="number" id="refresh-interval" min="10" value="10" />
-
-          <button type="submit">Сохранить интервал</button>
+          <button type="submit" class="secondary-button">Сохранить</button>
         </form>
-      </div>
+      </section>
 
       <div id="loader" class="hidden">Загрузка...</div>
       <div id="device-table"></div>
     </main>
+
+    <footer>
+      <p>Выпускная квалификационная работа на тему:</p>
+      <p>
+        Разработка программного обеспечения учета ресурсов телекоммуникационного
+        оборудования сети доступа
+      </p>
+      <p>Выполнил: Студент группы ИКПИ-11, Волков Максим Александрович</p>
+      <p>
+        Научный руководитель: Кандидат технических наук, Доцент кафедры ПИиВТ,
+        Журавель Евгений Павлович
+      </p>
+    </footer>
 
     <script src="./js/script.js"></script>
   </body>
